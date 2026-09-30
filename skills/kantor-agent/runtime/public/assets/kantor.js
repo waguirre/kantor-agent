@@ -1330,12 +1330,12 @@ function makeActor(def) {
   el.className = 'person';
   el.style.setProperty('--c', def.color);
   el.innerHTML = def.kind === 'freelancer'
-    ? `<div class="bubble hide"></div><div class="tag"><small>Freelancer ·</small> ${esc(def.name)}</div>`
-    : `<div class="bubble hide"></div><div class="tag">${esc(def.name)} <small>· ${esc(def.role)}</small></div>`;
+    ? `<div class="bubble hide"></div><div class="tag"><small>Freelancer ·</small> ${esc(def.name)} <small class="prov"></small></div>`
+    : `<div class="bubble hide"></div><div class="tag">${esc(def.name)} <small>· ${esc(def.role)}</small> <small class="prov"></small></div>`;
   const label = new CSS2DObject(el);
   scene.add(label);
   const a = {
-    ...def, p, guitar, pad, book, mug, label, el, bubbleEl: el.querySelector('.bubble'),
+    ...def, p, guitar, pad, book, mug, label, el, bubbleEl: el.querySelector('.bubble'), provEl: el.querySelector('.prov'),
     goal: null, walking: false, path: [], i: 0, heading: 0, phase: 0, seated: false, arrivedAt: 0, holding: null,
     spotUntil: 0, bubble: { text: '', until: 0, cls: '' }, data: null, work: false, leaving: false, seed: hash(def.key) % 100,
   };
@@ -1821,11 +1821,12 @@ function maybeReload(d) {
   location.reload();
   return true;
 }
+const PROV_NAME = { claude: 'Claude', codex: 'Codex', agy: 'agy' };
 function actionText(a) {
   const d = a.data;
   if (!d) return '';
   const e = a.kind === 'ketua' ? d.last?.[0] : d.run?.last?.[0];
-  if (!e || Date.now() - new Date(e.t).getTime() > 25000) return '';
+  if (!e || Date.now() - new Date(e.t).getTime() > 300000) return '';
   return clip(e.text, 48);
 }
 function apply(d) {
@@ -2197,6 +2198,9 @@ function updateActor(a, dt, t, now) {
   a.label.position.set(tmpV.x, tmpV.y + 0.42, tmpV.z);
   const outside = tmpV.x < ROOM.x0 - 0.05;
   a.el.classList.toggle('out', outside);
+  const pv = a.kind === 'ketua' ? 'Claude' : PROV_NAME[a.data?.run?.provider] || (a.data?.run ? 'Claude' : '');
+  const pt = pv ? `· ${pv}` : '';
+  if (a.provEl && a.provEl.textContent !== pt) a.provEl.textContent = pt;
   let text = '';
   let cls = '';
   if (now < a.bubble.until) {

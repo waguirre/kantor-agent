@@ -12,6 +12,8 @@
 //   (akhirnya = aktivitas terakhir + running_window, supaya penugasan job lain tidak berubah surut).
 import path from 'node:path';
 import { Transcripts } from './transcripts.mjs';
+import { scanCodex } from './codex.mjs';
+import { scanAgy } from './agy.mjs';
 import { hash, isoMs, readText, phpTrim, strcmp, tsMs } from './util.mjs';
 
 const VERSION = '1.0.0';
@@ -19,6 +21,9 @@ const VERSION = '1.0.0';
 export function buildState({ projectDir, storageDir, cfg, now }) {
   const nowSec = Math.floor(now / 1000);
   const scan = new Transcripts(projectDir, storageDir, cfg).scan(nowSec);
+  // Fork: sesi Codex ikut sebagai run (agentType 'Codex'); hanya server Node.
+  scan.runs = [...scan.runs, ...scanCodex(nowSec, cfg), ...scanAgy(nowSec, cfg)];
+  scan.exists = scan.exists || scan.runs.length > 0;
   const RW = cfg.running_window * 1000;
   const CD = cfg.cooldown * 1000;
   const MA = cfg.main_active * 1000;
@@ -130,6 +135,7 @@ export function buildState({ projectDir, storageDir, cfg, now }) {
     return {
       id: r.id,
       agent_type: r.agentType,
+      provider: r.provider ?? 'claude',
       task: task(r),
       status: lastJob ? r.status : 'selesai',
       reason: lastJob ? r.reason : null,
