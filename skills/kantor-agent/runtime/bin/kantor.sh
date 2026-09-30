@@ -56,6 +56,8 @@ elif [ -n "${KANTOR_PROJECT:-}" ]; then P0="$KANTOR_PROJECT"
 elif [ "$CMD" = autostart ] && [ -n "${CLAUDE_PROJECT_DIR:-}" ]; then P0="$CLAUDE_PROJECT_DIR"
 else P0="$PWD"; fi
 PROJECT="$(cd "$P0" 2>/dev/null && pwd -P)" || die "folder project tidak ditemukan: $P0"
+# Git Bash/MSYS: pakai path Windows agar hash & slug sama dengan Node dan folder transkrip Claude (C--Users-...).
+command -v cygpath >/dev/null 2>&1 && PROJECT="$(cygpath -w "$PROJECT")"
 SLUG="$(printf '%s' "$PROJECT" | sed 's/[^a-zA-Z0-9]/-/g')"
 STATE="${KANTOR_STATE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/kantor-agent}/$SLUG"
 ENVF="$STATE/server.env"
