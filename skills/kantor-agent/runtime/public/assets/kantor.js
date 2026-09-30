@@ -20,11 +20,11 @@ const SPARE = Math.max(0, Math.min(4, Number(CFG.spare_desks) || 4));
 // ---------------------------------------------------------------- bantuan umum
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const fmtTime = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-const fmtHm = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
-const fmtDate = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
-const fmtNum = new Intl.NumberFormat('id-ID');
-const fmtCompact = new Intl.NumberFormat('id-ID', { notation: 'compact', maximumFractionDigits: 1 });
+const fmtTime = new Intl.DateTimeFormat('es', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+const fmtHm = new Intl.DateTimeFormat('es', { hour: '2-digit', minute: '2-digit', hour12: false });
+const fmtDate = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
+const fmtNum = new Intl.NumberFormat('es');
+const fmtCompact = new Intl.NumberFormat('es', { notation: 'compact', maximumFractionDigits: 1 });
 const hhmmss = (iso) => (iso ? fmtTime.format(new Date(iso)).replace(/\./g, ':') : '');
 const hhmm = (iso) => (iso ? fmtHm.format(new Date(iso)).replace(/\./g, ':') : '');
 const ago = (iso) => {
@@ -291,7 +291,7 @@ const door = (() => {
   sign.ctx.fillStyle = '#fff';
   sign.ctx.font = `700 34px ${SANS}`;
   sign.ctx.textAlign = 'center';
-  sign.ctx.fillText('MASUK', 128, 45);
+  sign.ctx.fillText('ENTRADA', 128, 45);
   sign.tex.needsUpdate = true;
   const plate = mesh(new THREE.PlaneGeometry(0.5, 0.125), new THREE.MeshBasicMaterial({ map: sign.tex, toneMapped: false }), { cast: false });
   plate.rotation.y = Math.PI / 2;
@@ -536,10 +536,10 @@ function drawTv() {
   ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#e50914';
   ctx.font = `800 58px ${SANS}`;
-  ctx.fillText('TONTON', 48, 84);
+  ctx.fillText('VER', 48, 84);
   ctx.fillStyle = '#d0d0d0';
   ctx.font = `500 24px ${SANS}`;
-  ['Beranda', 'Serial', 'Film', 'Daftar Saya'].forEach((t, i) => ctx.fillText(t, 330 + i * 150, 76));
+  ['Inicio', 'Series', 'Películas', 'Mi lista'].forEach((t, i) => ctx.fillText(t, 330 + i * 150, 76));
   const hero = ctx.createLinearGradient(0, 120, 0, 460);
   hero.addColorStop(0, '#3a1f4f');
   hero.addColorStop(1, '#141414');
@@ -547,21 +547,21 @@ function drawTv() {
   ctx.fillRect(48, 120, W - 96, 320);
   ctx.fillStyle = '#ffffff';
   ctx.font = `800 64px ${SANS}`;
-  ctx.fillText('Jejak Rempah', 90, 260);
+  ctx.fillText('La ruta de las especias', 90, 260);
   ctx.font = `500 26px ${SANS}`;
   ctx.fillStyle = '#e6e6e6';
-  ctx.fillText('Serial dokumenter · Musim 2 · Episode baru tiap Jumat', 90, 306);
+  ctx.fillText('Serie documental · Temporada 2 · Episodio nuevo cada viernes', 90, 306);
   ctx.fillStyle = '#ffffff';
   roundRect(ctx, 90, 340, 170, 58, 8);
   ctx.fill();
   ctx.fillStyle = '#141414';
   ctx.font = `700 26px ${SANS}`;
-  ctx.fillText('▶  Putar', 118, 378);
+  ctx.fillText('▶  Reproducir', 118, 378);
   ctx.fillStyle = 'rgba(120,120,120,.7)';
   roundRect(ctx, 280, 340, 220, 58, 8);
   ctx.fill();
   ctx.fillStyle = '#ffffff';
-  ctx.fillText('ⓘ  Info lanjut', 304, 378);
+  ctx.fillText('ⓘ  Más info', 304, 378);
   ctx.fillStyle = '#e6e6e6';
   ctx.fillText('Seguir viendo', 48, 494);
   ['#7a3b2e', '#2e5a7a', '#5a7a2e', '#6f5bbd', '#b8862b', '#2e7a6a'].forEach((c, i) => {
@@ -1197,7 +1197,7 @@ function buildDesk(def) {
   desks[def.id] = d;
   if (def.kind === 'ketua') drawPlate(d, KETUA_NAME, 'Líder', def.color);
   else if (def.kind === 'tim') drawPlate(d, TEAM_NAMES[def.idx], 'Equipo', def.color);
-  else drawPlate(d, `Meja cadangan ${def.idx + 1}`, 'Freelancer', def.color);
+  else drawPlate(d, `Escritorio libre ${def.idx + 1}`, 'Freelancer', def.color);
 }
 DESK_DEFS.forEach(buildDesk);
 
@@ -1666,7 +1666,7 @@ function updateDeskScreens(d, now) {
     drawIdleScreen(d.side.scr, 'Layar terkunci', '', m.color, true);
   } else {
     drawIdleScreen(d.main.scr, `Escritorio libre ${d.idx + 1}`, 'para freelancers', '#9a938a', true);
-    drawIdleScreen(d.side.scr, 'Kosong', '', '#9a938a', true);
+    drawIdleScreen(d.side.scr, 'Libre', '', '#9a938a', true);
   }
 }
 function drawTodoBoard(k) {
@@ -1732,7 +1732,7 @@ function drawTodoBoard(k) {
     ctx.textAlign = 'center';
     ctx.fillText('Aún no hay lista de tareas en la sesión principal.', W / 2, H / 2 + 40);
     ctx.font = `34px ${HAND}`;
-    ctx.fillText('Muncul otomatis saat Claude memakai TodoWrite.', W / 2, H / 2 + 94);
+    ctx.fillText('Aparece solo cuando Claude usa TodoWrite.', W / 2, H / 2 + 94);
     ctx.textAlign = 'left';
   }
   tex.needsUpdate = true;
@@ -1805,7 +1805,7 @@ async function poll() {
     apply(d);
   } catch {
     $('liveDot').classList.add('off');
-    $('liveTxt').textContent = 'Terputus';
+    $('liveTxt').textContent = 'Desconectado';
   } finally {
     setTimeout(poll, document.hidden ? POLL_MS * 4 : POLL_MS);
   }
@@ -1929,7 +1929,7 @@ function apply(d) {
   for (const desk of Object.values(desks)) {
     if (desk.kind === 'spare' && !desk.who && desk.plateSig !== '') {
       desk.plateSig = '';
-      drawPlate(desk, `Meja cadangan ${desk.idx + 1}`, 'Freelancer', desk.color);
+      drawPlate(desk, `Escritorio libre ${desk.idx + 1}`, 'Freelancer', desk.color);
     }
   }
 
@@ -1982,7 +1982,7 @@ function renderUi(d, fresh) {
 
   const banner = $('banner');
   if (!d.transcripts) {
-    banner.textContent = 'Menunggu aktivitas Claude Code di folder project ini.';
+    banner.textContent = 'Esperando actividad de Claude Code en la carpeta de este proyecto.';
     banner.classList.add('show');
   } else banner.classList.remove('show');
 
@@ -2030,7 +2030,7 @@ function renderUi(d, fresh) {
   }
   if (extra.length) {
     const title = extra.map((f) => `Freelancer · ${f.name} — ${STATE_UI[f.state]?.label || f.state}: ${f.run?.task || ''}`).join('\n');
-    cards.push(`<div class="card card-ui more" tabindex="0" title="${esc(title)}" aria-label="${esc(`${extra.length} freelancer lain tanpa meja`)}"><span class="ava">+${extra.length}</span><div class="h"><span class="nm">Freelancer lain</span></div><div class="task">${esc(extra.slice(0, 3).map((f) => f.name).join(', '))}${extra.length > 3 ? ' …' : ''}</div><div class="act">meja cadangan penuh — tetap dihitung</div></div>`);
+    cards.push(`<div class="card card-ui more" tabindex="0" title="${esc(title)}" aria-label="${esc(`${extra.length} freelancers más sin escritorio`)}"><span class="ava">+${extra.length}</span><div class="h"><span class="nm">Más freelancers</span></div><div class="task">${esc(extra.slice(0, 3).map((f) => f.name).join(', '))}${extra.length > 3 ? ' …' : ''}</div><div class="act">meja cadangan penuh — tetap dihitung</div></div>`);
   }
   const el = $('cards');
   const n = cards.length;
