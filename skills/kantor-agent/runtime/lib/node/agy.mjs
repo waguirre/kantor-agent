@@ -39,7 +39,7 @@ export function summarizeAgy(text) {
       continue;
     }
     if (!last || last[1] !== null) run.segs.push([e.t, null]);
-    if (e.phase === 'pre') {
+    if (e.phase === 'pre' || e.phase === 'post') {
       const txt = describeAgy(e.tool, e.cmd);
       run.tools++;
       run.lastKind = 'tool';
