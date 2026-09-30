@@ -19,11 +19,11 @@ Argumen user: $ARGUMENTS
 2. Skrip bersifat idempoten: bila server sudah berjalan untuk project ini ia hanya mencetak URL; port sibuk → otomatis
    pindah ke port bebas berikutnya; Node ≥ 18 dipakai bila ada, selain itu PHP ≥ 8.1. Bila keduanya tidak ada, sampaikan
    pesan error skrip apa adanya (cara memasang Node/PHP) lalu berhenti.
-3. **Laporkan singkat** (Bahasa Indonesia): URL lokal (baris `URL :`), runtime, cara menghentikan
+3. **Informa brevemente** (en español): URL lokal (baris `URL :`), runtime, cara menghentikan
    (`/kantor-agent stop` atau perintah `Hentikan` yang dicetak). Bila skrip mencetak `Catatan : belum ada transkrip…`,
    jelaskan bahwa kantor terisi setelah Claude Code dipakai di folder ini (semua karakter santai sampai ada aktivitas).
-4. **Tawarkan URL publik dalam satu kalimat** (jangan dijalankan tanpa persetujuan eksplisit): "Ingin dibuka dari ponsel
-   di luar jaringan? Jalankan `/kantor-agent publik`." Saat user memintanya, setelah `tunnel` berhasil sampaikan
+4. **Tawarkan URL publik dalam satu kalimat** (jangan dijalankan tanpa persetujuan eksplisit): "¿Quieres abrirlo desde el móvil
+   fuera de la red? Ejecuta `/kantor-agent publik`." Saat user memintanya, setelah `tunnel` berhasil sampaikan
    peringatannya: siapa pun yang tahu link bisa melihat aktivitas agent (read-only, diredaksi), bagikan hanya ke orang
    tepercaya, dan matikan dengan `/kantor-agent tutup-publik`.
 

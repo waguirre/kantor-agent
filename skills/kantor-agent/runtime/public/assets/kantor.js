@@ -30,16 +30,16 @@ const hhmm = (iso) => (iso ? fmtHm.format(new Date(iso)).replace(/\./g, ':') : '
 const ago = (iso) => {
   if (!iso) return '';
   const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
-  if (s < 45) return 'baru saja';
-  if (s < 3600) return `${Math.round(s / 60)} mnt lalu`;
-  if (s < 86400) return `${Math.round(s / 3600)} jam lalu`;
+  if (s < 45) return 'justo ahora';
+  if (s < 3600) return `hace ${Math.round(s / 60)} min`;
+  if (s < 86400) return `hace ${Math.round(s / 3600)} h`;
   return fmtDate.format(new Date(iso));
 };
 const dur = (a, b) => {
   const s = Math.max(0, ((b ? new Date(b).getTime() : Date.now()) - new Date(a).getTime()) / 1000);
-  if (s < 60) return `${Math.round(s)} dtk`;
-  if (s < 3600) return `${Math.round(s / 60)} mnt`;
-  return `${Math.floor(s / 3600)} j ${Math.round((s % 3600) / 60)} m`;
+  if (s < 60) return `${Math.round(s)} s`;
+  if (s < 3600) return `${Math.round(s / 60)} min`;
+  return `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} min`;
 };
 const clip = (s, n) => {
   const a = Array.from(String(s ?? ''));
@@ -59,20 +59,20 @@ function rng(seed) {
 }
 const pickOne = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const STATE_UI = {
-  bekerja: { label: 'Bekerja', css: '#1f9d57' },
-  selesai: { label: 'Selesai', css: '#0f7f8f' },
-  santai: { label: 'Santai', css: '#8a8378' },
+  bekerja: { label: 'Trabajando', css: '#1f9d57' },
+  selesai: { label: 'Listo', css: '#0f7f8f' },
+  santai: { label: 'Relajado', css: '#8a8378' },
 };
 const RUN_UI = {
-  bekerja: { label: 'Bekerja', css: '#1f9d57' },
-  selesai: { label: 'Selesai', css: '#0f7f8f' },
-  terhenti: { label: 'Terhenti', css: '#c46a1c' },
+  bekerja: { label: 'Trabajando', css: '#1f9d57' },
+  selesai: { label: 'Listo', css: '#0f7f8f' },
+  terhenti: { label: 'Detenido', css: '#c46a1c' },
   limit: { label: 'Limit', css: '#c43d3d' },
 };
 const TODO_STATUS = {
   pending: { label: 'Rencana', css: '#9a938a', note: '#fff1a8' },
   in_progress: { label: 'Dikerjakan', css: '#2f9a6d', note: '#c9ecd6' },
-  completed: { label: 'Selesai', css: '#2f9a6d', note: '#dff1e3' },
+  completed: { label: 'Listo', css: '#2f9a6d', note: '#dff1e3' },
 };
 
 // ---------------------------------------------------------------- renderer
@@ -563,7 +563,7 @@ function drawTv() {
   ctx.fillStyle = '#ffffff';
   ctx.fillText('ⓘ  Info lanjut', 304, 378);
   ctx.fillStyle = '#e6e6e6';
-  ctx.fillText('Lanjutkan menonton', 48, 494);
+  ctx.fillText('Seguir viendo', 48, 494);
   ['#7a3b2e', '#2e5a7a', '#5a7a2e', '#6f5bbd', '#b8862b', '#2e7a6a'].forEach((c, i) => {
     const tx = 48 + i * 200;
     const tg = ctx.createLinearGradient(tx, 510, tx + 186, 690);
@@ -1195,8 +1195,8 @@ function buildDesk(def) {
   seat.add(officeChair(boss ? '#5a3f33' : '#3a3f4a'));
   const d = { ...def, group: desk, seat, main, side, deskMug, lamp, plate: np, data: null, who: null, sig: '', drawnAt: 0, plateSig: '' };
   desks[def.id] = d;
-  if (def.kind === 'ketua') drawPlate(d, KETUA_NAME, 'Ketua', def.color);
-  else if (def.kind === 'tim') drawPlate(d, TEAM_NAMES[def.idx], 'Tim', def.color);
+  if (def.kind === 'ketua') drawPlate(d, KETUA_NAME, 'Líder', def.color);
+  else if (def.kind === 'tim') drawPlate(d, TEAM_NAMES[def.idx], 'Equipo', def.color);
   else drawPlate(d, `Meja cadangan ${def.idx + 1}`, 'Freelancer', def.color);
 }
 DESK_DEFS.forEach(buildDesk);
@@ -1227,58 +1227,58 @@ PLACES.door = { kind: 'door', pos: V(ROOM.x0 - 0.9, CORRIDOR_Z), heading: -Math.
 const SPOT_IDS = Object.keys(SPOTS);
 
 const QUIPS = {
-  tv: ['Filmnya lagi seru nih 🍿', 'Eh, aktornya siapa ya?', 'Jangan di-skip dulu!', 'Episode ini bagus banget'],
-  ps: ['Gooool! ⚽', 'Satu match lagi ah 🎮', 'Stiknya agak nge-drift nih', 'Tunggu, aku belum siap!'],
-  coffee: ['Ngopi dulu biar melek ☕', 'Espresso double, please', 'Wangi banget kopinya', 'Gulanya di mana ya?'],
-  water: ['Minum air putih dulu 💧', 'Galonnya tinggal dikit', 'Seger!', 'Airnya dingin, mantap'],
-  guitar: ['🎸 jreng… jreng…', 'Request lagu dong', 'Kuncinya G atau C ya?', 'Senarnya perlu diganti'],
-  window: ['Langitnya cerah ya ☀️', 'Peregangan dulu, pegal 🙆', 'Macet banget di bawah', 'Ada layangan tuh!'],
-  meet1: ['Rapat lima menit, janji!', 'Siapa yang pesan kopi?', 'Kursinya empuk juga'],
-  meet2: ['Diskusi ringan dulu ☕', 'Laptopnya siapa ini?', 'Duduk dulu ah'],
-  meet3: ['Meja ini paling adem', 'Ngobrol santai dulu', 'Kita bahas nanti aja'],
-  bookshelf: ['Buku ini seru juga 📚', 'Wah, ada komik!', 'Bukunya belum dikembalikan nih'],
+  tv: ['¡Qué buena está la peli! 🍿', 'Oye, ¿quién es ese actor?', '¡No la adelantes!', 'Este episodio está buenísimo'],
+  ps: ['¡Gooool! ⚽', 'Una partida más 🎮', 'El mando se desvía un poco', '¡Espera, no estoy listo!'],
+  coffee: ['Un cafecito para despertar ☕', 'Espresso doble, por favor', 'Qué rico huele el café', '¿Dónde está el azúcar?'],
+  water: ['A tomar agua 💧', 'Queda poco en el botellón', '¡Refrescante!', 'El agua está fría, genial'],
+  guitar: ['🎸 rasgueo… rasgueo…', 'Pidan una canción', '¿Es en sol o en do?', 'Hay que cambiar las cuerdas'],
+  window: ['Qué cielo despejado ☀️', 'A estirar un poco, estoy tieso 🙆', 'Cómo está el tráfico abajo', '¡Mira, una cometa!'],
+  meet1: ['Reunión de cinco minutos, ¡lo prometo!', '¿Quién pidió el café?', 'Qué cómoda la silla'],
+  meet2: ['Una charla ligera primero ☕', '¿De quién es esta laptop?', 'Me siento un ratito'],
+  meet3: ['Esta mesa es la más fresca', 'Charlemos con calma', 'Lo vemos después'],
+  bookshelf: ['Este libro está bueno 📚', '¡Mira, hay un cómic!', 'Este libro no lo devolvieron'],
 };
 // obrolan receh (sengaja tidak menyebut data nyata apa pun)
 const CHAT = [
   ['{to}, main bola di PS yuk! Yang kalah traktir bakso', 'Ogah, kemarin aku kalah 3–0 😅'],
-  ['Filmnya jangan di-spoiler ya, {to}!', 'Siap, mulutku terkunci 🤐'],
-  ['Kopinya kok pahit banget?', 'Itu espresso, bukan kopi sachet 😂'],
-  ['Galon siapa yang ngabisin?', 'Bukan aku, sumpah!'],
-  ['Gitarnya fals dikit tuh, {to}', 'Namanya juga gitar kantor'],
+  ['¡No me spoilees la peli, {to}!', 'Tranquilo, mis labios están sellados 🤐'],
+  ['¿Por qué está tan amargo el café?', 'Es espresso, no café instantáneo 😂'],
+  ['¿Quién se acabó el botellón?', '¡Yo no, lo juro!'],
+  ['La guitarra suena algo desafinada, {to}', 'Es la guitarra de la oficina, qué esperabas'],
   ['Besok hujan nggak ya?', 'Bawa payung aja biar aman ☔'],
   ['Ada gorengan nggak di pantry?', 'Tadi ada, udah habis 🙃'],
-  ['Ngantuk banget habis makan siang', 'Sama, butuh kopi kedua'],
+  ['Qué sueño después de almorzar', 'Igual, necesito un segundo café'],
   ['Kucingku tadi pagi nyolong ikan', 'Wkwk pasti kucing oranye'],
   ['{to}, weekend mau ke mana?', 'Rebahan aja, paling mewah 😴'],
   ['Lagu apa ini? Enak juga', 'Lagu lama, tapi masih enak'],
-  ['{to}, itu gelas kopi ketiga ya?', 'Biar fokus nanti 😆'],
-  ['Kemarin nemu warung mi ayam enak', 'Wah, bagi lokasinya dong!'],
-  ['{to}, kamu tim bubur diaduk?', 'Nggak diaduk dong, garis keras'],
-  ['AC-nya dingin banget ya', 'Pakai jaket, jangan kalah sama AC'],
+  ['{to}, ¿ese es el tercer café?', 'Para concentrarme luego 😆'],
+  ['Ayer encontré un puesto de fideos buenísimo', '¡Pásame la ubicación!'],
+  ['{to}, ¿eres del equipo de la avena revuelta?', 'Sin revolver, línea dura'],
+  ['El aire acondicionado está helado', 'Ponte una chaqueta, no te dejes vencer'],
   ['{to}, headset-mu mana?', 'Lagi di-charge 🔋'],
   ['Martabak manis atau telur?', 'Dua-duanya, biar adil'],
-  ['{to}, tanamannya udah disiram?', 'Udah, tadi pagi 🌱'],
-  ['Kok tiba-tiba pengin nasi padang', 'Rendangnya jangan lupa!'],
-  ['Siapa yang naruh kaus kaki di sofa?', 'Bukan punyaku… kayaknya 😬'],
+  ['{to}, ¿ya regaste la planta?', 'Sí, esta mañana 🌱'],
+  ['De repente se me antoja comida padang', '¡No olvides el rendang!'],
+  ['¿Quién dejó calcetines en el sofá?', 'No son míos… creo 😬'],
   ['{to}, tadi berangkat naik apa?', 'Ojek, lancar jaya'],
-  ['Hari ini kok cepat banget ya', 'Iya, tahu-tahu sore'],
-  ['Pengin liburan ke pantai', 'Ajak-ajak dong!'],
+  ['Qué rápido pasa hoy', 'Sí, de repente ya es tarde'],
+  ['Quiero vacaciones en la playa', '¡Invítame!'],
   ['{to}, suka pedas nggak?', 'Level lima pun aman 🌶️'],
-  ['Kursi ini bunyi kalau diduduki', 'Sudah dari dulu, jadi ciri khas'],
-  ['Siapa yang pinjam spidol biru?', 'Ada di papan, tuh'],
+  ['Esta silla cruje al sentarse', 'Siempre lo ha hecho, es su sello'],
+  ['¿Quién tiene el marcador azul?', 'Está en la pizarra'],
   ['{to}, sudah sarapan?', 'Sudah, roti bakar 🍞'],
-  ['Es teh atau es jeruk?', 'Es teh manis, selalu'],
-  ['Jam dinding itu telat nggak sih?', 'Tepat kok, kitanya yang telat'],
+  ['¿Té helado o jugo de naranja?', 'Té dulce, como siempre'],
+  ['¿El reloj de pared va atrasado?', 'Está bien, los atrasados somos nosotros'],
   ['{to}, tim kucing atau tim anjing?', 'Tim kucing, jelas 🐈'],
-  ['Kemarin nonton bola?', 'Ketiduran di babak pertama'],
-  ['Hujan-hujan enaknya makan bakso', 'Setuju, kuahnya panas'],
+  ['¿Viste el partido ayer?', 'Me dormí en el primer tiempo'],
+  ['Con lluvia apetece una sopa', 'De acuerdo, bien caliente'],
   ['{to}, kaosmu baru ya?', 'Iya, diskon kemarin 😄'],
-  ['Wah, bukunya ada yang baru', 'Siapa yang beli ya?'],
-  ['Mau pesan kopi susu, ada yang nitip?', 'Aku! Gula dikit ya'],
+  ['Hay libros nuevos', '¿Quién los compró?'],
+  ['Voy a pedir café con leche, ¿alguien quiere?', '¡Yo! Con poca azúcar'],
   ['{to}, playlist-mu apa?', 'Campur aduk, dangdut sampai jazz'],
-  ['Parkiran tadi penuh banget', 'Aku sampai muter dua kali'],
-  ['Kayaknya perlu beli galon lagi', 'Nanti aku telepon depot'],
-  ['{to}, jangan lupa minum air', 'Siap, bos air 💧'],
+  ['El estacionamiento estaba lleno', 'Di dos vueltas'],
+  ['Creo que hay que pedir otro botellón', 'Luego llamo al proveedor'],
+  ['{to}, no olvides tomar agua', '¡A la orden, jefe del agua! 💧'],
   ['Sore ini cerah ya', 'Enak buat jalan-jalan'],
 ];
 
@@ -1417,7 +1417,7 @@ function arrive(a, instant = false) {
     a.gone = true;
   } else {
     a.heading = pl.heading;
-    if (!instant && Math.random() < 0.55 && performance.now() > a.bubble.until) say(a, pickOne(QUIPS[pl.spot] || ['Santai dulu']));
+    if (!instant && Math.random() < 0.55 && performance.now() > a.bubble.until) say(a, pickOne(QUIPS[pl.spot] || ['A descansar un rato']));
   }
 }
 function walkPose(a) {
@@ -1484,8 +1484,8 @@ function workMode(a) {
 }
 
 // Ketua + 4 anggota tim selalu ada
-const KETUA = makeActor({ key: 'ketua', kind: 'ketua', name: KETUA_NAME, role: 'Ketua', color: COLORS.ketua, look: LOOKS.ketua, desk: 'A0' });
-const TEAM = TEAM_NAMES.map((n, i) => makeActor({ key: `tim-${i}`, kind: 'tim', idx: i, name: n, role: 'Tim', color: COLORS.team[i % COLORS.team.length], look: LOOKS.team[i], desk: `A${i + 1}` }));
+const KETUA = makeActor({ key: 'ketua', kind: 'ketua', name: KETUA_NAME, role: 'Líder', color: COLORS.ketua, look: LOOKS.ketua, desk: 'A0' });
+const TEAM = TEAM_NAMES.map((n, i) => makeActor({ key: `tim-${i}`, kind: 'tim', idx: i, name: n, role: 'Equipo', color: COLORS.team[i % COLORS.team.length], look: LOOKS.team[i], desk: `A${i + 1}` }));
 
 // ---------------------------------------------------------------- lounge: tempat unik per aktor + obrolan
 const LOUNGE = { chatAt: performance.now() + 4000 };
@@ -1543,7 +1543,7 @@ function drawIdleScreen(scr, title, sub, css, dim) {
   tex.needsUpdate = true;
 }
 function screenApp(mode) {
-  return { type: 'Editor', read: 'Membaca berkas', terminal: 'Terminal', think: 'Catatan', done: 'Ringkasan' }[mode] || 'Aplikasi kerja';
+  return { type: 'Editor', read: 'Leyendo archivo', terminal: 'Terminal', think: 'Notas', done: 'Resumen' }[mode] || 'Aplicación de trabajo';
 }
 function drawWorkScreen(scr, who, events, title, footer, mode) {
   const { ctx, canvas, tex } = scr;
@@ -1568,7 +1568,7 @@ function drawWorkScreen(scr, who, events, title, footer, mode) {
   let y = 104;
   if (!rows.length) {
     ctx.fillStyle = term ? '#8b93a7' : '#9a938a';
-    ctx.fillText('Belum ada aksi.', 34, y);
+    ctx.fillText('Aún no hay acciones.', 34, y);
   }
   rows.forEach((e, i) => {
     ctx.fillStyle = term ? '#6c7489' : '#b0a89c';
@@ -1594,14 +1594,14 @@ function drawTaskCard(scr, who, run) {
   ctx.fillRect(0, 0, W, 64);
   ctx.fillStyle = '#ffffff';
   ctx.font = `700 30px ${SANS}`;
-  ctx.fillText(fit(ctx, `Tugas ${who.name}`, W - 60), 28, 43);
+  ctx.fillText(fit(ctx, `Tareas de ${who.name}`, W - 60), 28, 43);
   ctx.fillStyle = '#2b2a28';
   ctx.font = `600 36px ${SANS}`;
   const y = wrap(ctx, run.task, 28, 124, W - 56, 44, 4);
   ctx.fillStyle = '#6f6a62';
   ctx.font = `500 25px ${MONO}`;
-  ctx.fillText(fit(ctx, `jenis: ${run.agent_type}`, W - 56), 28, Math.max(y + 6, 300));
-  ctx.fillText(fit(ctx, `mulai ${hhmm(run.started)} · ${dur(run.started, run.ended)} · ${fmtNum.format(run.tools)} aksi`, W - 56), 28, Math.max(y + 46, 340));
+  ctx.fillText(fit(ctx, `tipo: ${run.agent_type}`, W - 56), 28, Math.max(y + 6, 300));
+  ctx.fillText(fit(ctx, `inicio ${hhmm(run.started)} · ${dur(run.started, run.ended)} · ${fmtNum.format(run.tools)} acciones`, W - 56), 28, Math.max(y + 46, 340));
   tex.needsUpdate = true;
 }
 function drawTodoScreen(scr, todos) {
@@ -1613,13 +1613,13 @@ function drawTodoScreen(scr, todos) {
   ctx.fillRect(0, 0, W, 60);
   ctx.fillStyle = '#4a463f';
   ctx.font = `600 30px ${SANS}`;
-  ctx.fillText('Daftar tugas sesi utama', 28, 41);
+  ctx.fillText('Lista de tareas de la sesión principal', 28, 41);
   let y = 110;
   ctx.font = `500 26px ${SANS}`;
   const items = todos?.items || [];
   if (!items.length) {
     ctx.fillStyle = '#9a938a';
-    ctx.fillText('Belum ada daftar tugas (TodoWrite).', 28, y);
+    ctx.fillText('Aún no hay lista de tareas (TodoWrite).', 28, y);
   }
   for (const it of items.slice(0, 8)) {
     const st = TODO_STATUS[it.status] || TODO_STATUS.pending;
@@ -1647,25 +1647,25 @@ function updateDeskScreens(d, now) {
     const k = a.data || {};
     if (k.state === 'bekerja' || k.state === 'selesai') {
       const mode = workMode(a);
-      const title = k.activity === 'menunggu-tim' ? `Menunggu ${k.waiting_on} subagent` : 'Sesi utama';
-      drawWorkScreen(d.main.scr, a, k.last, title, `${a.name} · ${STATE_UI[k.state]?.label || ''} · ${fmtNum.format(k.tools || 0)} aksi · ${fmtCompact.format(k.tokens || 0)} token`, mode);
-    } else drawIdleScreen(d.main.scr, `${a.name} · Santai`, k.updated ? `aktif terakhir ${ago(k.updated)}` : 'belum ada sesi', a.color, false);
+      const title = k.activity === 'menunggu-tim' ? `Esperando ${k.waiting_on} subagentes` : 'Sesión principal';
+      drawWorkScreen(d.main.scr, a, k.last, title, `${a.name} · ${STATE_UI[k.state]?.label || ''} · ${fmtNum.format(k.tools || 0)} acciones · ${fmtCompact.format(k.tokens || 0)} token`, mode);
+    } else drawIdleScreen(d.main.scr, `${a.name} · Relajado`, k.updated ? `activo ${ago(k.updated)}` : 'sin sesión', a.color, false);
     drawTodoScreen(d.side.scr, k.todos);
     return;
   }
   if (a && a.data?.run && a.work) {
     const r = a.data.run;
     const mode = workMode(a);
-    drawWorkScreen(d.main.scr, a, r.last, r.task, `${a.name} · ${r.agent_type} · ${fmtNum.format(r.tools)} aksi · ${fmtCompact.format(r.tokens)} token`, mode);
+    drawWorkScreen(d.main.scr, a, r.last, r.task, `${a.name} · ${r.agent_type} · ${fmtNum.format(r.tools)} acciones · ${fmtCompact.format(r.tokens)} token`, mode);
     drawTaskCard(d.side.scr, a, r);
     return;
   }
   if (d.kind === 'tim') {
     const m = TEAM[d.idx];
-    drawIdleScreen(d.main.scr, `${m.name} · ${STATE_UI[m.data?.state || 'santai'].label}`, m.data?.run ? `terakhir: ${clip(m.data.run.task, 40)}` : 'menunggu tugas', m.color, false);
+    drawIdleScreen(d.main.scr, `${m.name} · ${STATE_UI[m.data?.state || 'santai'].label}`, m.data?.run ? `último: ${clip(m.data.run.task, 40)}` : 'esperando tareas', m.color, false);
     drawIdleScreen(d.side.scr, 'Layar terkunci', '', m.color, true);
   } else {
-    drawIdleScreen(d.main.scr, `Meja cadangan ${d.idx + 1}`, 'untuk freelancer', '#9a938a', true);
+    drawIdleScreen(d.main.scr, `Escritorio libre ${d.idx + 1}`, 'para freelancers', '#9a938a', true);
     drawIdleScreen(d.side.scr, 'Kosong', '', '#9a938a', true);
   }
 }
@@ -1677,12 +1677,12 @@ function drawTodoBoard(k) {
   ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#2b2a28';
   ctx.font = `72px ${HAND}`;
-  ctx.fillText(`Tugas ${KETUA_NAME}`, 40, 84);
+  ctx.fillText(`Tareas de ${KETUA_NAME}`, 40, 84);
   const todos = k?.todos;
   const items = todos?.items || [];
   ctx.font = `34px ${HAND}`;
   ctx.fillStyle = '#6f6a62';
-  ctx.fillText(fit(ctx, todos ? `sumber: ${todos.source === 'Task' ? 'TaskCreate/TaskUpdate' : 'TodoWrite'} sesi utama · ${items.length} tugas · ${hhmm(todos.at)}` : 'sumber: daftar tugas (TodoWrite) sesi utama', W - 560), 520, 76);
+  ctx.fillText(fit(ctx, todos ? `fuente: ${todos.source === 'Task' ? 'TaskCreate/TaskUpdate' : 'TodoWrite'} sesión principal · ${items.length} tareas · ${hhmm(todos.at)}` : 'sumber: daftar tugas (TodoWrite) sesi utama', W - 560), 520, 76);
   const cols = ['pending', 'in_progress', 'completed'];
   const colW = (W - 80) / 3;
   cols.forEach((st, i) => {
@@ -1730,7 +1730,7 @@ function drawTodoBoard(k) {
     ctx.fillStyle = '#9a938a';
     ctx.font = `44px ${HAND}`;
     ctx.textAlign = 'center';
-    ctx.fillText('Belum ada daftar tugas di sesi utama.', W / 2, H / 2 + 40);
+    ctx.fillText('Aún no hay lista de tareas en la sesión principal.', W / 2, H / 2 + 40);
     ctx.font = `34px ${HAND}`;
     ctx.fillText('Muncul otomatis saat Claude memakai TodoWrite.', W / 2, H / 2 + 94);
     ctx.textAlign = 'left';
@@ -1751,14 +1751,14 @@ function drawHistBoard(runs) {
   const list = (runs || []).filter((r) => localDay(r.started) === today);
   ctx.fillStyle = '#2f5bd3';
   ctx.font = `68px ${HAND}`;
-  ctx.fillText('Subagent hari ini', 44, 86);
+  ctx.fillText('Subagentes de hoy', 44, 86);
   ctx.fillStyle = '#6f6a62';
   ctx.font = `36px ${HAND}`;
-  ctx.fillText(fit(ctx, `sumber: transkrip subagent · ${list.length} tugas`, W - 640), 600, 80);
+  ctx.fillText(fit(ctx, `fuente: transcripciones de subagentes · ${list.length} tareas`, W - 640), 600, 80);
   if (!list.length) {
     ctx.fillStyle = '#9a938a';
     ctx.font = `44px ${HAND}`;
-    ctx.fillText('Belum ada subagent hari ini — tim sedang santai.', 44, 200);
+    ctx.fillText('Aún no hay subagentes hoy: el equipo descansa.', 44, 200);
   }
   list.slice(0, 9).forEach((r, i) => {
     const y = 170 + i * 92;
@@ -1784,7 +1784,7 @@ function drawHistBoard(runs) {
   if (list.length > 9) {
     ctx.fillStyle = '#6f6a62';
     ctx.font = `34px ${HAND}`;
-    ctx.fillText(`+${list.length - 9} lagi (lihat tab Riwayat)`, 44, H - 30);
+    ctx.fillText(`+${list.length - 9} más (ver pestaña Historial)`, 44, H - 30);
   }
   tex.needsUpdate = true;
 }
@@ -1846,7 +1846,7 @@ function apply(d) {
     if (firstLoad) placeAt(KETUA, 'desk:A0');
     else goTo(KETUA, 'desk:A0');
   } else if (!KETUA.goal?.startsWith('spot:') || firstLoad) lounge(KETUA, now, firstLoad);
-  if (live && kPrev && kPrev.state === 'bekerja' && d.ketua.state === 'selesai') say(KETUA, 'Beres, menunggu instruksi berikutnya', 3800, 'hi');
+  if (live && kPrev && kPrev.state === 'bekerja' && d.ketua.state === 'selesai') say(KETUA, 'Listo, espero la siguiente instrucción', 3800, 'hi');
   prev.set('ketua', { state: d.ketua.state });
 
   // tim
@@ -1861,11 +1861,11 @@ function apply(d) {
       if (firstLoad) placeAt(a, `desk:${a.desk}`);
       else goTo(a, `desk:${a.desk}`);
       if (live && (!p || p.state !== 'bekerja' || p.runId !== m.run?.id)) {
-        say(a, 'Siap, saya kerjakan!', 3600, 'hi');
+        say(a, '¡Entendido, me encargo!', 3600, 'hi');
         if (m.run) say(KETUA, `${a.name}, tolong: ${clip(m.run.task, 40)}`, 4000);
       }
     } else {
-      if (live && p && p.state === 'bekerja') say(a, 'Beres!', 3600, 'hi');
+      if (live && p && p.state === 'bekerja') say(a, '¡Listo!', 3600, 'hi');
       if (!a.goal?.startsWith('spot:') || firstLoad) lounge(a, now, firstLoad);
     }
     prev.set(a.key, { state: m.state, runId: m.run?.id ?? null });
@@ -1885,7 +1885,7 @@ function apply(d) {
         placeAt(a, 'door');
         a.gone = false;
         goTo(a, `desk:B${f.desk}`);
-        say(a, 'Permisi, saya bantu ya!', 3000);
+        say(a, 'Permiso, ¡te ayudo!', 3000);
       }
     }
     a.data = f;
@@ -1895,12 +1895,12 @@ function apply(d) {
       a.work = true;
       a.leaving = false;
       goTo(a, `desk:${a.desk}`);
-      if (live && p && p.runId !== f.run?.id) say(a, 'Siap, saya kerjakan!', 3600, 'hi');
-      if (live && !p) setTimeout(() => { if (actors.has(f.key)) say(a, 'Siap, saya kerjakan!', 3600, 'hi'); }, 3200);
+      if (live && p && p.runId !== f.run?.id) say(a, '¡Entendido, me encargo!', 3600, 'hi');
+      if (live && !p) setTimeout(() => { if (actors.has(f.key)) say(a, '¡Entendido, me encargo!', 3600, 'hi'); }, 3200);
     } else if (!a.leaving) {
       a.work = false;
       a.leaving = true;
-      if (live) say(a, 'Beres! Pamit dulu ya 👋', 3800, 'hi');
+      if (live) say(a, '¡Listo! Me despido 👋', 3800, 'hi');
       goTo(a, 'door');
     }
     prev.set(f.key, { state: f.state, runId: f.run?.id ?? null });
@@ -1972,11 +1972,11 @@ function renderUi(d, fresh) {
   const workingTeam = d.team.filter((m) => m.state === 'bekerja').map((m) => m.name);
   const flWork = d.freelancers.filter((f) => f.state === 'bekerja').length;
   let phase;
-  if (!d.transcripts) phase = 'Belum ada transkrip Claude Code untuk folder ini — kantor terisi otomatis setelah Claude Code dipakai di sini.';
+  if (!d.transcripts) phase = 'Aún no hay transcripciones de Claude Code para esta carpeta: la oficina se llena sola al usar Claude Code aquí.';
   else if (workingTeam.length || flWork) phase = `Sedang bekerja: ${[...workingTeam, ...(flWork ? [`${flWork} freelancer`] : [])].join(', ')}${d.ketua.state === 'bekerja' ? ` · ${KETUA_NAME} memantau` : ''}`;
-  else if (d.ketua.state === 'bekerja') phase = `${KETUA_NAME} sedang bekerja di sesi utama — tim santai menunggu tugas`;
-  else if (d.ketua.state === 'selesai') phase = `${KETUA_NAME} baru selesai — menunggu instruksi berikutnya`;
-  else phase = 'Semua santai ☕ — nonton, ngopi & ngobrol. Otomatis kembali kerja saat ada subagent.';
+  else if (d.ketua.state === 'bekerja') phase = `${KETUA_NAME} trabaja en la sesión principal; el equipo espera tareas`;
+  else if (d.ketua.state === 'selesai') phase = `${KETUA_NAME} acaba de terminar; espera la siguiente instrucción`;
+  else phase = 'Todos relajados ☕: ven la tele, toman café y charlan. Vuelven al trabajo cuando haya un subagente.';
   $('phase').textContent = phase;
   $('phase').title = phase;
 
@@ -1990,42 +1990,42 @@ function renderUi(d, fresh) {
   const feedHtml = d.feed.slice(0, 100).map((e) => {
     const k = `${e.t}|${e.who}|${e.text}`;
     return `<li class="k-${esc(e.kind)}${fresh.has(k) ? ' fresh' : ''}"><span class="av" style="background:${esc(e.color)}">${esc(initial(e.name.replace(/^Freelancer · /, '')))}</span><div><div class="meta"><span class="who" style="color:${esc(e.color)}">${esc(e.name)}</span><time>${esc(hhmmss(e.t))}</time></div><div class="txt">${esc(e.text)}</div></div></li>`;
-  }).join('') || '<li><div class="empty" style="grid-column:1/-1">Belum ada aktivitas.</div></li>';
+  }).join('') || '<li><div class="empty" style="grid-column:1/-1">Aún no hay actividad.</div></li>';
   for (const id of ['feed', 'feed2']) if ($(id).innerHTML !== feedHtml) $(id).innerHTML = feedHtml;
   $('feedCount').textContent = fmtNum.format(d.feed.length);
 
   // riwayat
   const runs = d.runs || [];
   $('nRuns').textContent = fmtNum.format(runs.length);
-  $('paneRuns').innerHTML = '<div class="src">Sumber: <b>transkrip subagent</b> 7 hari terakhir (terbaru di atas)</div>'
+  $('paneRuns').innerHTML = '<div class="src">Fuente: <b>transcripciones de subagentes</b> de los últimos 7 días (lo más reciente arriba)</div>'
     + (runs.length ? runs.map((r) => {
       const ui = RUN_UI[r.status] || RUN_UI.selesai;
       return `<div class="run"><span class="c" style="background:${esc(r.color)}"></span><span class="t" title="${esc(r.task)}">${esc(r.task)}</span><span class="chip" style="color:${ui.css}"><i></i>${esc(ui.label)}</span><span class="w">${esc(r.label)} · ${esc(r.agent_type)} · ${esc(hhmm(r.started))} · ${esc(dur(r.started, r.ended))}</span></div>`;
-    }).join('') : '<div class="empty">Belum ada subagent. Karakter tetap santai sampai Claude memanggil subagent.</div>');
+    }).join('') : '<div class="empty">Aún no hay subagentes. Los personajes descansan hasta que Claude llame a uno.</div>');
   // daftar tugas Ketua
   const todos = d.ketua.todos;
   $('tugasWho').textContent = KETUA_NAME;
   $('nTodo').textContent = fmtNum.format(todos ? todos.items.filter((it) => it.status !== 'completed').length : 0);
-  $('paneTodo').innerHTML = `<div class="src">Sumber: <b>${todos && todos.source === 'Task' ? 'TaskCreate/TaskUpdate' : 'TodoWrite'}</b> di sesi utama${todos ? ` · diperbarui ${esc(ago(todos.at))}` : ''}</div>`
+  $('paneTodo').innerHTML = `<div class="src">Fuente: <b>${todos && todos.source === 'Task' ? 'TaskCreate/TaskUpdate' : 'TodoWrite'}</b> en la sesión principal${todos ? ` · diperbarui ${esc(ago(todos.at))}` : ''}</div>`
     + (todos && todos.items.length ? todos.items.map((it) => `<div class="todo s-${esc(it.status)}"><i>${it.status === 'completed' ? '✓' : it.status === 'in_progress' ? '▶' : '○'}</i><span>${esc(it.text)}</span></div>`).join('') : '<div class="empty">Belum ada daftar tugas di sesi utama.</div>');
 
   // kartu
   const k = d.ketua;
-  const kLast = k.updated ? `aktif terakhir ${ago(k.updated)}` : 'belum ada sesi utama';
-  const kSub = k.other_sessions > 0 ? `+${k.other_sessions} sesi lain aktif`
-    : k.activity === 'menunggu-tim' ? `Menunggu ${k.waiting_on} subagent`
+  const kLast = k.updated ? `activo ${ago(k.updated)}` : 'sin sesión principal';
+  const kSub = k.other_sessions > 0 ? `+${k.other_sessions} sesiones más activas`
+    : k.activity === 'menunggu-tim' ? `Esperando ${k.waiting_on} subagentes`
       : k.state === 'santai' ? kLast : k.last?.[0]?.text || kLast;
-  const cards = [cardHtml({ key: 'ketua', name: KETUA_NAME, role: 'Ketua', color: COLORS.ketua, state: k.state, task: k.state === 'santai' ? 'Santai di lounge' : k.activity === 'alat' ? 'Menjalankan alat' : 'Sesi utama', act: kSub, working: k.state === 'bekerja' })];
+  const cards = [cardHtml({ key: 'ketua', name: KETUA_NAME, role: 'Líder', color: COLORS.ketua, state: k.state, task: k.state === 'santai' ? 'Relajado en el lounge' : k.activity === 'alat' ? 'Menjalankan alat' : 'Sesión principal', act: kSub, working: k.state === 'bekerja' })];
   for (const m of d.team) {
     const r = m.run;
-    const task = m.state === 'santai' ? (r ? `Terakhir: ${r.task}` : 'Santai di lounge') : r?.task || '';
-    const act = m.state === 'bekerja' ? r?.last?.[0]?.text || 'Mulai bekerja…' : m.state === 'selesai' ? `Beres ${ago(r?.ended)}` : r ? `selesai ${ago(r.ended)}` : 'menunggu tugas';
-    cards.push(cardHtml({ key: m.key, name: m.name, role: 'Tim', color: m.color, state: m.state, task, act, working: m.state === 'bekerja' }));
+    const task = m.state === 'santai' ? (r ? `Último: ${r.task}` : 'Relajado en el lounge') : r?.task || '';
+    const act = m.state === 'bekerja' ? r?.last?.[0]?.text || 'Empezando a trabajar…' : m.state === 'selesai' ? `Listo ${ago(r?.ended)}` : r ? `selesai ${ago(r.ended)}` : 'esperando tareas';
+    cards.push(cardHtml({ key: m.key, name: m.name, role: 'Equipo', color: m.color, state: m.state, task, act, working: m.state === 'bekerja' }));
   }
   const seated = d.freelancers.filter((f) => f.desk !== null && f.desk < SPARE);
   const extra = d.freelancers.filter((f) => f.desk === null || f.desk >= SPARE);
   for (const f of seated) {
-    const act = f.state === 'bekerja' ? f.run?.last?.[0]?.text || 'Mulai bekerja…' : 'Beres, pamit pulang';
+    const act = f.state === 'bekerja' ? f.run?.last?.[0]?.text || 'Empezando a trabajar…' : 'Listo, se va a casa';
     cards.push(cardHtml({ key: f.key, name: f.name, role: 'Freelancer', color: f.color, state: f.state, task: f.run?.task || '', act, working: f.state === 'bekerja' }));
   }
   if (extra.length) {
@@ -2051,7 +2051,7 @@ function setMin(side, on) {
   document.body.classList.toggle(`min-${side}`, on);
   const b = panel.querySelector('.minbtn');
   b.setAttribute('aria-expanded', String(!on));
-  b.title = on ? 'Buka panel' : 'Perkecil panel';
+  b.title = on ? 'Abrir panel' : 'Reducir panel';
   try { localStorage.setItem(`kantor.min.${side}`, on ? '1' : '0'); } catch { /* abaikan */ }
 }
 for (const side of ['left', 'right']) {
@@ -2078,7 +2078,7 @@ document.addEventListener('click', (e) => {
 });
 function setLapang(on) {
   document.body.classList.toggle('lapang', on);
-  $('togglePanel').textContent = on ? 'Tampilkan panel' : 'Lihat kantor penuh';
+  $('togglePanel').textContent = on ? 'Mostrar panel' : 'Ver oficina completa';
   try { localStorage.setItem('kantor.lapang', on ? '1' : '0'); } catch { /* abaikan */ }
   onResize();
 }
@@ -2139,7 +2139,7 @@ function onResize() {
 addEventListener('resize', onResize);
 try { if (localStorage.getItem('kantor.lapang') === '1') document.body.classList.add('lapang'); } catch { /* abaikan */ }
 onResize();
-if (document.body.classList.contains('lapang')) $('togglePanel').textContent = 'Tampilkan panel';
+if (document.body.classList.contains('lapang')) $('togglePanel').textContent = 'Mostrar panel';
 
 let nightState = null;
 function updateDaylight() {

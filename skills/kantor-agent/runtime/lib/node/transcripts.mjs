@@ -305,23 +305,23 @@ export class Transcripts {
     }
     let text;
     switch (name) {
-      case 'Read': text = `Membaca ${p ?? ''}`; break;
-      case 'Write': text = `Menulis ${p ?? ''}`; break;
-      case 'Edit': case 'MultiEdit': case 'NotebookEdit': text = `Mengubah ${p ?? ''}`; break;
-      case 'Bash': text = `Menjalankan: ${str(inp.description) !== '' ? str(inp.description) : `${firstToken(str(inp.command))} …`}`; break;
-      case 'Grep': text = `Mencari '${clip(str(inp.pattern), 50)}'`; break;
-      case 'Glob': text = `Mencari file ${clip(str(inp.pattern), 60)}`; break;
-      case 'Agent': case 'Task': text = `Mendelegasikan: ${str(inp.description) !== '' ? str(inp.description) : 'subagent'}`; break;
-      case 'SendMessage': text = 'Mengirim pesan ke agent'; break;
-      case 'AskUserQuestion': text = 'Bertanya ke user'; break;
-      case 'WebFetch': case 'WebSearch': text = 'Riset web'; break;
-      case 'Skill': text = `Memuat skill ${str(inp.skill)}`; break;
-      case 'TodoWrite': text = 'Memperbarui daftar tugas'; break;
-      case 'TaskCreate': text = `Membuat tugas: ${str(inp.subject)}`; break;
-      case 'TaskUpdate': text = `Memperbarui tugas${str(inp.status) !== '' ? ` → ${str(inp.status)}` : ''}`; break;
-      case 'TaskStop': text = 'Menghentikan subagent'; break;
-      case 'SubagentHandback': text = 'Menyerahkan laporan'; break;
-      case 'ToolSearch': text = 'Mencari alat'; break;
+      case 'Read': text = `Leyendo ${p ?? ''}`; break;
+      case 'Write': text = `Escribiendo ${p ?? ''}`; break;
+      case 'Edit': case 'MultiEdit': case 'NotebookEdit': text = `Editando ${p ?? ''}`; break;
+      case 'Bash': text = `Ejecutando: ${str(inp.description) !== '' ? str(inp.description) : `${firstToken(str(inp.command))} …`}`; break;
+      case 'Grep': text = `Buscando '${clip(str(inp.pattern), 50)}'`; break;
+      case 'Glob': text = `Buscando archivos ${clip(str(inp.pattern), 60)}`; break;
+      case 'Agent': case 'Task': text = `Delegando: ${str(inp.description) !== '' ? str(inp.description) : 'subagente'}`; break;
+      case 'SendMessage': text = 'Enviando mensaje a un agente'; break;
+      case 'AskUserQuestion': text = 'Preguntando al usuario'; break;
+      case 'WebFetch': case 'WebSearch': text = 'Investigando en la web'; break;
+      case 'Skill': text = `Cargando skill ${str(inp.skill)}`; break;
+      case 'TodoWrite': text = 'Actualizando la lista de tareas'; break;
+      case 'TaskCreate': text = `Creando tarea: ${str(inp.subject)}`; break;
+      case 'TaskUpdate': text = `Actualizando tarea${str(inp.status) !== '' ? ` → ${str(inp.status)}` : ''}`; break;
+      case 'TaskStop': text = 'Deteniendo subagente'; break;
+      case 'SubagentHandback': text = 'Entregando informe'; break;
+      case 'ToolSearch': text = 'Buscando herramienta'; break;
       default: text = clip(name, 60);
     }
     return [oneLine(text, 160), p];

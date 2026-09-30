@@ -8,7 +8,7 @@ const EVENTS_KEEP = 40;
 const TAIL_MAX = 1024 * 1024;
 
 export function describeAgy(tool, cmd) {
-  if (cmd) return oneLine(`Menjalankan: ${cmd} …`, 160);
+  if (cmd) return oneLine(`Ejecutando: ${cmd} …`, 160);
   return oneLine(clip(tool || 'alat', 60), 160);
 }
 
@@ -25,7 +25,7 @@ export function summarizeAgy(text) {
     let run = by.get(e.session);
     if (!run) {
       run = {
-        provider: 'agy', agentType: 'agy', description: 'Sesi agy', parentAgent: null, id: `agy-${e.session.slice(0, 12)}`,
+        provider: 'agy', agentType: 'agy', description: 'Sesión de agy', parentAgent: null, id: `agy-${e.session.slice(0, 12)}`,
         session: e.session, started: e.t, updated: e.t, tools: 0, tokens: 0, events: [], lastKind: null, limit: null,
         files: [], segs: [], stops: [],
       };

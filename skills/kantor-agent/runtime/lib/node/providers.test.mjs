@@ -17,7 +17,7 @@ const codex = [
 const r = summarizeCodex(codex, 'x.jsonl');
 assert.equal(r.provider, 'codex');
 assert.equal(r.id, 'codex-abc123def456');
-assert.equal(r.description, 'Menjalankan: git …');
+assert.equal(r.description, 'Ejecutando: git …');
 assert.deepEqual(r.segs, [[`${T}1Z`, `${T}3Z`]]);
 assert.equal(r.lastKind, 'handback');
 
@@ -29,7 +29,7 @@ assert.equal(out.trim(), '{}'); // el emisor nunca decide nada
 execFileSync('node', [emit, 'stop'], { input: '{"session_id":"s1"}', env });
 const [a] = summarizeAgy(fs.readFileSync(path.join(dir, 'events.jsonl'), 'utf8'));
 assert.equal(a.provider, 'agy');
-assert.equal(a.description, 'Menjalankan: npm …');
+assert.equal(a.description, 'Ejecutando: npm …');
 assert.equal(a.segs.length, 1);
 assert.notEqual(a.segs[0][1], null);
 assert.ok(!fs.readFileSync(path.join(dir, 'events.jsonl'), 'utf8').includes('npm test')); // sólo 1er token

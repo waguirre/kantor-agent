@@ -11,11 +11,11 @@ const EVENTS_KEEP = 40;
 // Aksi Codex → teks singkat (gaya sama dengan describeTool Claude)
 export function describeCodex(name, raw) {
   const s = typeof raw === 'string' ? raw : '';
-  if (name === 'apply_patch' || s.includes('apply_patch')) return 'Mengubah file';
+  if (name === 'apply_patch' || s.includes('apply_patch')) return 'Editando archivos';
   const m = /cmd\s*:\s*"((?:[^"\\]|\\.)*)"/.exec(s) ?? /"(?:cmd|command)"\s*:\s*"((?:[^"\\]|\\.)*)"/.exec(s);
   if (m) {
     const w = m[1].trim().split(/\s+/)[0] || '';
-    return oneLine(w.startsWith('$') || w === '' ? 'Menjalankan skrip' : `Menjalankan: ${w.slice(0, 30)} …`, 160);
+    return oneLine(w.startsWith('$') || w === '' ? 'Ejecutando script' : `Ejecutando: ${w.slice(0, 30)} …`, 160);
   }
   return oneLine(clip(name || 'alat', 60), 160);
 }
@@ -65,7 +65,7 @@ export function summarizeCodex(text, file) {
     }
   }
   if (run.id === '') run.id = `codex-${basename(file, '.jsonl').slice(-12)}`;
-  if (run.description === '') run.description = `Sesi Codex${cwd ? ` · ${basename(cwd.replace(/\\/g, '/'))}` : ''}`;
+  if (run.description === '') run.description = `Sesión de Codex${cwd ? ` · ${basename(cwd.replace(/\\/g, '/'))}` : ''}`;
   return run;
 }
 

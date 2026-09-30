@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -187,38 +187,38 @@ body.lapang .cards { opacity: .92; }
 </script>
 </head>
 <body>
-<div class="loading" id="loading"><div>Menyiapkan kantor…<i></i></div></div>
+<div class="loading" id="loading"><div>Preparando la oficina…<i></i></div></div>
 <div id="scene" aria-hidden="true"></div>
 <div class="labels" id="labels" aria-hidden="true"></div>
-<div class="nogl">Browser ini tidak mendukung WebGL, jadi kantor 3D tidak bisa ditampilkan. Panel aktivitas tetap berjalan.</div>
+<div class="nogl">Este navegador no admite WebGL, así que la oficina 3D no se puede mostrar. El panel de actividad sigue funcionando.</div>
 
 <div class="top">
   <div class="brand card-ui">
     <h1>Kantor Agent <span>· {{TITLE}}</span></h1>
-    <p id="phase" aria-live="polite">Memuat…</p>
+    <p id="phase" aria-live="polite">Cargando…</p>
   </div>
   <div class="stats card-ui">
-    <div class="stat"><small>Status</small><span class="live"><i class="dot" id="liveDot"></i><span id="liveTxt">Menghubungkan…</span></span></div>
-    <div class="stat"><small>Subagent hari ini</small><b id="sToday">–</b></div>
-    <div class="stat"><small>Aktif sekarang</small><b id="sActive">–</b></div>
-    <div class="stat" id="pubStat" hidden><small>URL publik</small><a id="pubLink" href="#" target="_blank" rel="noopener noreferrer">buka</a></div>
+    <div class="stat"><small>Status</small><span class="live"><i class="dot" id="liveDot"></i><span id="liveTxt">Conectando…</span></span></div>
+    <div class="stat"><small>Subagentes de hoy</small><b id="sToday">–</b></div>
+    <div class="stat"><small>Activos ahora</small><b id="sActive">–</b></div>
+    <div class="stat" id="pubStat" hidden><small>URL pública</small><a id="pubLink" href="#" target="_blank" rel="noopener noreferrer">abrir</a></div>
   </div>
-  <button class="toggle card-ui" id="togglePanel" type="button" title="Tombol pintas: H">Lihat kantor penuh</button>
+  <button class="toggle card-ui" id="togglePanel" type="button" title="Atajo: H">Ver oficina completa</button>
 </div>
 
 <div class="banner" id="banner" role="status"></div>
 
 <aside class="side left card-ui" aria-label="Aktivitas langsung">
-  <header><h2>Aktivitas langsung</h2><span class="hright"><span class="chip" id="feedCount">0</span><button type="button" class="minbtn" data-min="left" aria-expanded="true" title="Perkecil / buka panel"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">Perkecil panel</span></button></span></header>
+  <header><h2>Actividad en vivo</h2><span class="hright"><span class="chip" id="feedCount">0</span><button type="button" class="minbtn" data-min="left" aria-expanded="true" title="Reducir / abrir panel"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">Perkecil panel</span></button></span></header>
   <div class="scroll"><ul class="feed" id="feed"></ul></div>
 </aside>
 
 <aside class="side right card-ui" aria-label="Riwayat dan daftar tugas">
   <div class="tabrow"><div class="tabs" role="tablist">
-    <button role="tab" data-tab="riwayat" aria-selected="true">Riwayat<span class="n" id="nRuns">0</span></button>
-    <button role="tab" data-tab="tugas" aria-selected="false">Tugas <span id="tugasWho">Ketua</span><span class="n" id="nTodo">0</span></button>
-    <button role="tab" data-tab="feed2" aria-selected="false" class="mfeed" hidden>Aktivitas</button>
-  </div><button type="button" class="minbtn" data-min="right" aria-expanded="true" title="Perkecil / buka panel"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">Perkecil panel</span></button></div>
+    <button role="tab" data-tab="riwayat" aria-selected="true">Historial<span class="n" id="nRuns">0</span></button>
+    <button role="tab" data-tab="tugas" aria-selected="false">Tareas de <span id="tugasWho">Líder</span><span class="n" id="nTodo">0</span></button>
+    <button role="tab" data-tab="feed2" aria-selected="false" class="mfeed" hidden>Actividad</button>
+  </div><button type="button" class="minbtn" data-min="right" aria-expanded="true" title="Reducir / abrir panel"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr">Perkecil panel</span></button></div>
   <div class="scroll">
     <section class="pane on" data-pane="riwayat" id="paneRuns"></section>
     <section class="pane" data-pane="tugas" id="paneTodo"></section>

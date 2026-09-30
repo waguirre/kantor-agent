@@ -213,16 +213,16 @@ export function buildState({ projectDir, storageDir, cfg, now }) {
     if (job.k === 0) {
       const parent = r.parentAgent !== null && byId.has(r.parentAgent) ? byId.get(r.parentAgent) : null;
       const req = parent !== null ? charInfo(charOf.get(parent.id), parent) : K;
-      add(job.startIso, job.start, req, 'assign', `${req.label} meminta ${who.label}: ${task(r)}`, null);
+      add(job.startIso, job.start, req, 'assign', `${req.label} le pide a ${who.label}: ${task(r)}`, null);
     } else {
-      add(job.startIso, job.start, who, 'resume', `${who.label} melanjutkan: ${task(r)}`, null);
+      add(job.startIso, job.start, who, 'resume', `${who.label} retoma: ${task(r)}`, null);
     }
     if (job.end !== null && job.end <= now) {
       const lastJob = r.effSegs.length - 1 === job.k;
-      let text = `${who.label} selesai: ${task(r)}`;
-      if (lastJob && r.status === 'limit') text = `${who.label} jeda — limit pemakaian`;
-      else if (lastJob && r.reason === 'dihentikan') text = `${who.label} dihentikan: ${task(r)}`;
-      else if (lastJob && r.reason === 'tidak-aktif') text = `${who.label} berhenti — tidak ada aktivitas ${Math.round(cfg.running_window / 60)} menit`;
+      let text = `${who.label} terminó: ${task(r)}`;
+      if (lastJob && r.status === 'limit') text = `${who.label} en pausa: límite de uso`;
+      else if (lastJob && r.reason === 'dihentikan') text = `${who.label} detenido: ${task(r)}`;
+      else if (lastJob && r.reason === 'tidak-aktif') text = `${who.label} se detuvo: sin actividad por ${Math.round(cfg.running_window / 60)} minutos`;
       add(job.endIso, job.end, who, 'done', text, null);
     }
   }
